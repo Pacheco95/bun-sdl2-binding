@@ -1,4 +1,4 @@
-import { SDL_Init } from "./ffi";
+import { SDL_Init as forward } from "./ffi";
 
 export const SDL_INIT_TIMER = 0x00000001;
 export const SDL_INIT_AUDIO = 0x00000010;
@@ -19,12 +19,4 @@ export const SDL_INIT_EVERYTHING =
   SDL_INIT_GAMECONTROLLER |
   SDL_INIT_SENSOR;
 
-class InitializationError extends Error {}
-
-export const init = (flags: number) => {
-  const result = SDL_Init(flags);
-  
-  if (result !== 0) {
-    throw new InitializationError();
-  }
-};
+export const SDL_Init = forward;

@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { quit } from "./quit";
+import { SDL_Quit } from "./quit";
 
 describe("quit", () => {
   test("should quit", () => {
-    expect(quit).not.toThrow();
+    expect(SDL_Quit).not.toThrow();
   });
 });
