@@ -16,13 +16,18 @@ export const SDL_WINDOW_FULLSCREEN_DESKTOP = SDL_WINDOW_FULLSCREEN | 0x00001000;
 export const SDL_WINDOW_FOREIGN = 0x00000800;
 export const SDL_WINDOW_ALLOW_HIGHDPI = 0x00002000;
 
+export const SDL_WINDOWPOS_CENTERED_MASK = 0x2fff0000;
+export const SDL_WINDOWPOS_CENTERED_DISPLAY = (X: number) =>
+  SDL_WINDOWPOS_CENTERED_MASK | X;
+export const SDL_WINDOWPOS_CENTERED = SDL_WINDOWPOS_CENTERED_DISPLAY(0);
+
 export const SDL_CreateWindow = (
   title: string,
   x: number,
   y: number,
   w: number,
   h: number,
-  flags: number,
+  flags: number
 ) => {
   const titleCstr = Buffer.from(`${title}\0`, "utf8");
   const window = foreign(ptr(titleCstr), x, y, w, h, flags);

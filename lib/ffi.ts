@@ -10,6 +10,7 @@ const {
     SDL_GetWindowTitle,
     SDL_GetError,
     SDL_ClearError,
+    SDL_PollEvent,
   },
 } = dlopen(`libSDL2.${suffix}`, {
   SDL_GetVersion: {
@@ -45,6 +46,10 @@ const {
     returns: FFIType.cstring,
   },
   SDL_ClearError: {},
+  SDL_PollEvent: {
+    args: [FFIType.pointer],
+    returns: FFIType.int,
+  },
 });
 
 export {
@@ -55,5 +60,6 @@ export {
   SDL_GetVersion,
   SDL_GetWindowTitle,
   SDL_Init,
+  SDL_PollEvent,
   SDL_Quit,
 };

@@ -5,4 +5,5 @@ export * from "./getError";
 export * from "./getVersion";
 export * from "./getWindowTitle";
 export * from "./init";
+export * from "./pollEvent";
 export * from "./quit";
