@@ -1,3 +1,3 @@
-import { SDL_GetError as forward } from "../ffi";
+import { SDL_GetError as foreign } from "../ffi";
 
-export const SDL_GetError = forward;
+export const SDL_GetError = foreign;

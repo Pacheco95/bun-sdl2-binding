@@ -1,8 +1,8 @@
-import { SDL_GetVersion as forward } from "../ffi";
+import { SDL_GetVersion as foreign } from "../ffi";
 
 export const SDL_GetVersion = () => {
   const ptr = new Uint8ClampedArray(3);
-  forward(ptr);
+  foreign(ptr);
 
   const version = {
     major: ptr[0],

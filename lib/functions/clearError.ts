@@ -1,3 +1,3 @@
-import { SDL_ClearError as forward } from "../ffi";
+import { SDL_ClearError as foreign } from "../ffi";
 
-export const SDL_ClearError = forward;
+export const SDL_ClearError = foreign;

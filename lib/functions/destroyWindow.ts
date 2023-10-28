@@ -1,3 +1,3 @@
-import { SDL_DestroyWindow as forward } from "../ffi";
+import { SDL_DestroyWindow as foreign } from "../ffi";
 
-export const SDL_DestroyWindow = forward;
+export const SDL_DestroyWindow = foreign;

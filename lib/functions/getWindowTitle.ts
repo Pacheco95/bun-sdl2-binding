@@ -1,3 +1,3 @@
-import { SDL_GetWindowTitle as forward } from "../ffi";
+import { SDL_GetWindowTitle as foreign } from "../ffi";
 
-export const SDL_GetWindowTitle = forward;
+export const SDL_GetWindowTitle = foreign;

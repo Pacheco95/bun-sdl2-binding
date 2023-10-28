@@ -1,3 +1,3 @@
-import { SDL_Quit as forward } from "../ffi";
+import { SDL_Quit as foreign } from "../ffi";
 
-export const SDL_Quit = forward;
+export const SDL_Quit = foreign;

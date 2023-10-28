@@ -1,4 +1,4 @@
-import { SDL_Init as forward } from "../ffi";
+import { SDL_Init as foreign } from "../ffi";
 
 export const SDL_INIT_TIMER = 0x00000001;
 export const SDL_INIT_AUDIO = 0x00000010;
@@ -19,4 +19,4 @@ export const SDL_INIT_EVERYTHING =
   SDL_INIT_GAMECONTROLLER |
   SDL_INIT_SENSOR;
 
-export const SDL_Init = forward;
+export const SDL_Init = foreign;
