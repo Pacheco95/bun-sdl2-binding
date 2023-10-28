@@ -21,11 +21,11 @@ export class KeyboardEvent {
     return read.u32(ptr(this.buffer), 0);
   }
 
-  get timestamp(): number {
+  get timestamp() {
     return read.u32(ptr(this.buffer), 4);
   }
 
-  get windowID(): number {
+  get windowID() {
     return read.u32(ptr(this.buffer), 8);
   }
 
@@ -33,8 +33,8 @@ export class KeyboardEvent {
     return read.u8(ptr(this.buffer), 12);
   }
 
-  get repeat(): number {
-    return read.u8(ptr(this.buffer), 13);
+  get repeat() {
+    return read.u8(ptr(this.buffer), 13) !== 0;
   }
 
   get keysym(): KeySym {
