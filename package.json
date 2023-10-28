@@ -1,5 +1,5 @@
 {
-  "name": "bun-sdl-ffi",
+  "name": "bun-sdl2-binding",
   "module": "index.ts",
   "type": "module",
   "scripts": {
