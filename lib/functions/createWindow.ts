@@ -1,5 +1,5 @@
 import { ptr } from "bun:ffi";
-import { SDL_CreateWindow as forward} from "./ffi";
+import { SDL_CreateWindow as forward} from "../ffi";
 
 export const SDL_WINDOW_FULLSCREEN = 0x00000001;
 export const SDL_WINDOW_OPENGL = 0x00000002;

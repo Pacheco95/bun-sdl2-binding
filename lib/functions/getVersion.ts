@@ -1,4 +1,4 @@
-import { SDL_GetVersion as forward } from "./ffi";
+import { SDL_GetVersion as forward } from "../ffi";
 
 export const SDL_GetVersion = () => {
   const ptr = new Uint8ClampedArray(3);
