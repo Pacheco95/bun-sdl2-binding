@@ -2,6 +2,9 @@
   "name": "bun-sdl-ffi",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "format": "bun x prettier . --write"
+  },
   "devDependencies": {
     "bun-types": "latest"
   },

@@ -1,5 +1,5 @@
 import { ptr } from "bun:ffi";
-import { SDL_CreateWindow as foreign} from "../ffi";
+import { SDL_CreateWindow as foreign } from "../ffi";
 
 export const SDL_WINDOW_FULLSCREEN = 0x00000001;
 export const SDL_WINDOW_OPENGL = 0x00000002;
@@ -16,8 +16,15 @@ export const SDL_WINDOW_FULLSCREEN_DESKTOP = SDL_WINDOW_FULLSCREEN | 0x00001000;
 export const SDL_WINDOW_FOREIGN = 0x00000800;
 export const SDL_WINDOW_ALLOW_HIGHDPI = 0x00002000;
 
-export const SDL_CreateWindow = (title: string, x: number, y: number, w: number, h: number, flags: number) => {
+export const SDL_CreateWindow = (
+  title: string,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  flags: number,
+) => {
   const titleCstr = Buffer.from(`${title}\0`, "utf8");
   const window = foreign(ptr(titleCstr), x, y, w, h, flags);
-  return window
+  return window;
 };

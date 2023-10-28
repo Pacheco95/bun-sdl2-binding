@@ -19,7 +19,7 @@ describe("SDL_CreateWindow", () => {
     SDL_DestroyWindow(null);
 
     expect(SDL_GetError().toString()).toBe(
-      "Video subsystem has not been initialized"
+      "Video subsystem has not been initialized",
     );
   });
 });
