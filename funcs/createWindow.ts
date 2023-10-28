@@ -25,4 +25,6 @@ export const createWindow = (title: string, x: number, y: number, w: number, h: 
   if (window === null) {
     throw new CreateWindowError();
   }
+
+  return window!
 };

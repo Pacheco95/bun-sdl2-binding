@@ -1,8 +1,6 @@
-import { afterAll, afterEach, describe, expect, test } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import { SDL_INIT_EVERYTHING, init } from "./init";
-import { quit } from "./quit";
 
-afterAll(quit);
 
 describe("init", () => {
   test("should initialize all systems", () => {

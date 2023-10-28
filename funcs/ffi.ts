@@ -1,7 +1,14 @@
 import { dlopen, FFIType, suffix } from "bun:ffi";
 
 const {
-  symbols: { SDL_GetVersion, SDL_Init, SDL_Quit, SDL_CreateWindow },
+  symbols: {
+    SDL_GetVersion,
+    SDL_Init,
+    SDL_Quit,
+    SDL_CreateWindow,
+    SDL_DestroyWindow,
+    SDL_GetWindowTitle,
+  },
 } = dlopen(`libSDL2.${suffix}`, {
   SDL_GetVersion: {
     args: [FFIType.ptr],
@@ -25,6 +32,20 @@ const {
     ],
     returns: FFIType.pointer,
   },
+  SDL_DestroyWindow: {
+    args: [FFIType.pointer],
+  },
+  SDL_GetWindowTitle: {
+    args: [FFIType.pointer],
+    returns: FFIType.cstring,
+  },
 });
 
-export { SDL_GetVersion, SDL_Init, SDL_Quit, SDL_CreateWindow };
+export {
+  SDL_GetVersion,
+  SDL_Init,
+  SDL_Quit,
+  SDL_CreateWindow,
+  SDL_DestroyWindow,
+  SDL_GetWindowTitle,
+};
