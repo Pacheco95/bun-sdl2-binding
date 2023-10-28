@@ -1,6 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { SDL_GetError } from "../ffi";
-import { SDL_Quit } from "./quit";
+import { SDL_GetError, SDL_Quit } from ".";
 
 describe("SDL_Quit", () => {
   test("should quit", () => {

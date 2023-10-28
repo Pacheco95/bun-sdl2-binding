@@ -1,10 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
+import { SDL_GetError, SDL_Quit } from ".";
 import { SDL_CreateWindow, SDL_WINDOW_HIDDEN } from "./createWindow";
 import { SDL_DestroyWindow } from "./destroyWindow";
-import { SDL_GetError } from "./getError";
-import { SDL_Quit } from "./quit";
 
-afterEach(SDL_Quit)
+afterEach(SDL_Quit);
 
 describe("SDL_CreateWindow", () => {
   test("should create window", () => {

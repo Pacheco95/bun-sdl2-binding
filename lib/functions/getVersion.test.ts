@@ -1,5 +1,7 @@
-import { describe, expect, test } from "bun:test";
-import { SDL_GetVersion } from ".";
+import { afterEach, describe, expect, test } from "bun:test";
+import { SDL_GetVersion, SDL_Quit } from ".";
+
+afterEach(SDL_Quit);
 
 describe("SDL_GetVersion", () => {
   test("should get version", () => {

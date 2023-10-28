@@ -1,8 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { SDL_CreateWindow, SDL_WINDOW_HIDDEN } from "./createWindow";
-import { SDL_DestroyWindow } from "./destroyWindow";
-import { SDL_GetError } from "./getError";
-import { SDL_Quit } from "./quit";
+import {
+  SDL_CreateWindow,
+  SDL_DestroyWindow,
+  SDL_GetError,
+  SDL_Quit,
+  SDL_WINDOW_HIDDEN,
+} from ".";
 
 afterEach(SDL_Quit);
 
