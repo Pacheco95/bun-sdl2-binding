@@ -27,7 +27,7 @@ export const SDL_CreateWindow = (
   y: number,
   w: number,
   h: number,
-  flags: number,
+  flags: number = 0,
 ) => {
   const titleCstr = Buffer.from(`${title}\0`, "utf8");
   const window = foreign(ptr(titleCstr), x, y, w, h, flags);
