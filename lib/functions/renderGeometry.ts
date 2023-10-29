@@ -1,6 +1,7 @@
 import { SDL_RenderGeometry as foreign } from "../ffi.ts";
 import { Pointer, ptr } from "bun:ffi";
 import { Vertex } from "../renderer/vertex.ts";
+import { DataViewAppender } from "../utils/dataViewAppender.ts";
 
 export const SDL_RenderGeometry = (
   renderer: Pointer,
@@ -12,31 +13,17 @@ export const SDL_RenderGeometry = (
   const numIndices = indices?.length ?? 0;
 
   const buffer = new ArrayBuffer(vertices.length * 20);
-  const view = new DataView(buffer);
-
-  let offset = 0;
+  const appender = new DataViewAppender(new DataView(buffer));
 
   for (const vertex of vertices) {
-    view.setFloat32(offset, vertex.position[0], true);
-    offset += 4;
-    view.setFloat32(offset, vertex.position[1], true);
-    offset += 4;
-    
-    const [r, g, b, a] = vertex.color
+    appender
+      .setFloat32(vertex.position[0], true)
+      .setFloat32(vertex.position[1], true)
 
-    view.setUint8(offset, r);
-    offset += 1;
-    view.setUint8(offset, g);
-    offset += 1;
-    view.setUint8(offset, b);
-    offset += 1;
-    view.setUint8(offset, a);
-    offset += 1;
+      .setNUint8(vertex.color)
 
-    view.setFloat32(offset, vertex.texCoord[0], true);
-    offset += 4;
-    view.setFloat32(offset, vertex.texCoord[1], true);
-    offset += 4;
+      .setFloat32(vertex.texCoord[0], true)
+      .setFloat32(vertex.texCoord[1], true);
   }
 
   const renderResult = foreign(
