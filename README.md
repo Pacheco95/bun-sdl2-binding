@@ -2,6 +2,10 @@
 
 This is an attempt to create a SDL2 binding for Bun, and it's my first time using FFI, so please, don't judge me!
 
+![Hello World Triangle](docs/hello-triangle.png)
+
+See this example in [index.ts](index.ts)
+
 ---
 
 To install dependencies:

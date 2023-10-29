@@ -23,11 +23,23 @@ import { SDL_DestroyRenderer, SDL_RenderPresent } from "./lib/ffi.ts";
 
 const SDL_Log = console.log;
 
+function logError() {
+  const error = SDL_GetError();
+
+  if (error.length > 0) {
+    SDL_Log(error);
+  }
+}
+
+const abort = (errorMessage?: string) => {
+  SDL_Log(errorMessage, SDL_GetError());
+  exit(1);
+};
+
 SDL_Log("Process ID:", process.pid);
 
-if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-  SDL_Log("Failed to initialize SDL:", SDL_GetError());
-  exit(1);
+if (SDL_Init(SDL_INIT_EVERYTHING) !== 0) {
+  abort("Failed to initialize SDL:");
 }
 
 const window = SDL_CreateWindow(
@@ -39,21 +51,17 @@ const window = SDL_CreateWindow(
 );
 
 if (!window) {
-  SDL_Log("Failed to create window:", SDL_GetError());
-  SDL_Quit();
-  exit(1);
+  abort("Failed to create window:");
 }
 
 const renderer = SDL_CreateRenderer(
-  window,
+  window!,
   -1,
   SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC,
 );
 
 if (!renderer) {
-  SDL_Log("Failed to create renderer:", SDL_GetError());
-  SDL_Quit();
-  exit(1);
+  abort("Failed to create renderer:");
 }
 
 const vertices = [
@@ -90,31 +98,14 @@ while (running) {
     }
   }
 
-  if (!SDL_SetRenderDrawColor(renderer!, 0, 0, 0, 255)) {
-    SDL_Log(SDL_GetError());
-  }
-
-  if (!SDL_RenderClear(renderer!)) {
-    SDL_Log(SDL_GetError());
-  }
-
-  if (!SDL_RenderGeometry(renderer!, null, vertices)) {
-    SDL_Log(SDL_GetError());
-  }
-
+  SDL_SetRenderDrawColor(renderer!, 0, 0, 0, 255);
+  SDL_RenderClear(renderer!);
+  SDL_RenderGeometry(renderer!, null, vertices);
   SDL_RenderPresent(renderer);
 
-  const error = SDL_GetError();
-
-  if (error.length > 0) {
-    SDL_Log(`'${error}'`);
-  }
+  logError();
 }
 
 SDL_DestroyRenderer(renderer);
-SDL_Log(SDL_GetError());
-
 SDL_DestroyWindow(window);
-SDL_Log(SDL_GetError());
-
 SDL_Quit();
