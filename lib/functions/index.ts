@@ -7,3 +7,7 @@ export * from "./getWindowTitle";
 export * from "./init";
 export * from "./pollEvent";
 export * from "./quit";
+export * from "./createRenderer";
+export * from "./setRendererDrawColor";
+export * from "./renderClear";
+export * from "./renderGeometry";

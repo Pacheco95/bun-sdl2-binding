@@ -11,6 +11,12 @@ const {
     SDL_GetError,
     SDL_ClearError,
     SDL_PollEvent,
+    SDL_CreateRenderer,
+    SDL_DestroyRenderer,
+    SDL_SetRenderDrawColor,
+    SDL_RenderPresent,
+    SDL_RenderClear,
+    SDL_RenderGeometry,
   },
 } = dlopen(`libSDL2.${suffix}`, {
   SDL_GetVersion: {
@@ -33,13 +39,13 @@ const {
       FFIType.int, // h
       FFIType.u32, // flags
     ],
-    returns: FFIType.pointer,
+    returns: FFIType.ptr,
   },
   SDL_DestroyWindow: {
-    args: [FFIType.pointer],
+    args: [FFIType.ptr],
   },
   SDL_GetWindowTitle: {
-    args: [FFIType.pointer],
+    args: [FFIType.ptr],
     returns: FFIType.cstring,
   },
   SDL_GetError: {
@@ -47,7 +53,36 @@ const {
   },
   SDL_ClearError: {},
   SDL_PollEvent: {
-    args: [FFIType.pointer],
+    args: [FFIType.ptr],
+    returns: FFIType.int,
+  },
+  SDL_CreateRenderer: {
+    args: [FFIType.ptr, FFIType.int, FFIType.u32],
+    returns: FFIType.ptr,
+  },
+  SDL_DestroyRenderer: {
+    args: [FFIType.ptr],
+  },
+  SDL_SetRenderDrawColor: {
+    args: [FFIType.ptr, FFIType.u8, FFIType.u8, FFIType.u8, FFIType.u8],
+    returns: FFIType.int,
+  },
+  SDL_RenderPresent: {
+    args: [FFIType.ptr],
+  },
+  SDL_RenderClear: {
+    args: [FFIType.ptr],
+    returns: FFIType.int,
+  },
+  SDL_RenderGeometry: {
+    args: [
+      FFIType.ptr,
+      FFIType.ptr,
+      FFIType.ptr,
+      FFIType.int,
+      FFIType.ptr,
+      FFIType.int,
+    ],
     returns: FFIType.int,
   },
 });
@@ -62,4 +97,10 @@ export {
   SDL_Init,
   SDL_PollEvent,
   SDL_Quit,
+  SDL_CreateRenderer,
+  SDL_DestroyRenderer,
+  SDL_SetRenderDrawColor,
+  SDL_RenderPresent,
+  SDL_RenderClear,
+  SDL_RenderGeometry,
 };

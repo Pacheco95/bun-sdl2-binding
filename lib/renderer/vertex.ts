@@ -1,18 +1,5 @@
-type PointArray = [number, number];
-
-type Point = {
-  x: number;
-  y: number;
-};
-
-type ColorArray = [number, number, number, number];
-
-type Color = {
-  r: number;
-  g: number;
-  b: number;
-  a: number;
-};
+import {Color, ColorArray} from "./color.ts";
+import {Point, PointArray} from "./point.ts";
 
 interface CreateVertex {
   position: Point | PointArray;
@@ -31,13 +18,14 @@ const TEX_X = 12;
 const TEX_Y = 16;
 
 export class Vertex {
-  private dv = new DataView(
-    new Uint8ClampedArray(
-      2 * Float32Array.BYTES_PER_ELEMENT +
-        4 * Uint8Array.BYTES_PER_ELEMENT +
-        2 * Float32Array.BYTES_PER_ELEMENT,
-    ).buffer,
-  );
+  public static SIZE_BYTES =
+    2 * Float32Array.BYTES_PER_ELEMENT +
+    4 * Uint8Array.BYTES_PER_ELEMENT +
+    2 * Float32Array.BYTES_PER_ELEMENT;
+
+  array = new Uint8ClampedArray(Vertex.SIZE_BYTES)
+  
+  private dv = new DataView(this.array.buffer);
 
   constructor({ position, color, texCoord = [0, 0] }: CreateVertex) {
     const posX = Array.isArray(position) ? position[0] : position.x;
@@ -78,9 +66,9 @@ export class Vertex {
   get texCoord(): PointArray {
     return [this.dv.getFloat32(TEX_X), this.dv.getFloat32(TEX_Y)];
   }
-  
-  get buffer() {
-    return this.dv.buffer
+
+  toJSON() {
+    return this.toString();
   }
 }
 
@@ -90,4 +78,4 @@ Vertex.prototype.toString = function () {
     color: this.color,
     texCoord: this.texCoord,
   });
-}
+};
