@@ -20,6 +20,7 @@ import { SDL_EventType } from "./lib/events/eventType.ts";
 import { KeyCode } from "./lib/events/keyboard/KeyCode.ts";
 import { Vertex } from "./lib/renderer/vertex.ts";
 import { SDL_DestroyRenderer, SDL_RenderPresent } from "./lib/ffi.ts";
+import { Color } from "./lib/renderer/color.ts";
 
 const SDL_Log = console.log;
 
@@ -65,20 +66,9 @@ if (!renderer) {
 }
 
 const vertices = [
-  new Vertex({
-    position: [400, 150],
-    color: [255, 0, 0, 255],
-  }),
-
-  new Vertex({
-    position: [200, 450],
-    color: [0, 0, 255, 255],
-  }),
-
-  new Vertex({
-    position: [600, 450],
-    color: [0, 255, 0, 255],
-  }),
+  new Vertex([400, 150], Color.RED),
+  new Vertex([200, 450], Color.GREEN),
+  new Vertex([600, 450], Color.BLUE),
 ];
 
 let running = true;

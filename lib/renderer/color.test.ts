@@ -2,10 +2,8 @@ import { describe, expect, test } from "bun:test";
 import { Color } from "./color.ts";
 
 describe("Color", () => {
-  test("should create opaque black color by default", () => {
-    const black = new Color();
-    expect(black.rgba).toEqual([0, 0, 0, 255]);
-    expect(black).toEqual(Color.BLACK);
+  test("color size in bytes is 4", () => {
+    expect(Color.SIZE_BYTES).toBe(4);
   });
 
   test("should create color with named channels", () => {
@@ -30,7 +28,10 @@ describe("Color", () => {
     expect(copy).toEqual(Color.BLACK);
   });
 
-  test("color size in bytes is 4", () => {
-    expect(Color.SIZE_BYTES).toBe(4);
+  test("should create color from hex string", () => {
+    expect(new Color("#000")).toEqual(Color.BLACK);
+    expect(new Color("#000", 0)).toEqual(Color.TRANSPARENT);
+    expect(new Color("#0000")).toEqual(Color.TRANSPARENT);
+    expect(new Color("#fff")).toEqual(Color.WHITE);
   });
 });

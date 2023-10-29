@@ -1,13 +1,13 @@
 import { Color, CreateColor } from "./color.ts";
 import { CreatePoint, Point } from "./point.ts";
 
-type CreateVertexArray = [CreatePoint, CreateColor, CreatePoint?];
-type CreateVertexFields = {
+export type CreateVertexArray = [CreatePoint, CreateColor, CreatePoint?];
+export type CreateVertexFields = {
   position: CreatePoint;
   color: CreateColor;
   texCoord?: CreatePoint;
 };
-type CreateVertex = CreateVertexFields | CreateVertexArray | Vertex;
+export type CreateVertex = CreateVertexFields | CreateVertexArray | Vertex;
 
 export class Vertex {
   public static readonly SIZE_BYTES = 2 * Point.SIZE_BYTES + Color.SIZE_BYTES;
