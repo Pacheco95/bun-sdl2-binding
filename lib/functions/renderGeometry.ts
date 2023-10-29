@@ -15,16 +15,7 @@ export const SDL_RenderGeometry = (
   const buffer = new ArrayBuffer(vertices.length * 20);
   const appender = new DataViewAppender(new DataView(buffer));
 
-  for (const vertex of vertices) {
-    appender
-      .setFloat32(vertex.position[0], true)
-      .setFloat32(vertex.position[1], true)
-
-      .setNUint8(vertex.color)
-
-      .setFloat32(vertex.texCoord[0], true)
-      .setFloat32(vertex.texCoord[1], true);
-  }
+  vertices.forEach((vertex) => appender.setUint8ClampedArray(vertex.array));
 
   const renderResult = foreign(
     renderer,

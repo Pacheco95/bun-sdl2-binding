@@ -38,16 +38,16 @@ export class Vertex {
     const texX = Array.isArray(texCoord) ? texCoord[0] : texCoord!.x;
     const texY = Array.isArray(texCoord) ? texCoord[1] : texCoord!.y;
 
-    this.dv.setFloat32(POS_X, posX);
-    this.dv.setFloat32(POS_Y, posY);
+    this.dv.setFloat32(POS_X, posX, true);
+    this.dv.setFloat32(POS_Y, posY, true);
 
     this.dv.setUint8(COLOR_R, r);
     this.dv.setUint8(COLOR_G, g);
     this.dv.setUint8(COLOR_B, b);
     this.dv.setUint8(COLOR_A, a);
 
-    this.dv.setFloat32(TEX_X, texX);
-    this.dv.setFloat32(TEX_Y, texY);
+    this.dv.setFloat32(TEX_X, texX, true);
+    this.dv.setFloat32(TEX_Y, texY, true);
   }
 
   get position(): PointArray {

@@ -58,4 +58,12 @@ export class DataViewAppender {
 
     return this;
   }
+
+  setUint8ClampedArray(array: Uint8ClampedArray) {
+    for (let el of array) {
+      this.setUint8(el);
+    }
+
+    return this;
+  }
 }
