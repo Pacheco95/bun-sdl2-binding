@@ -1,10 +1,10 @@
-import { Color, ColorArray } from "./color.ts";
-import { Point, PointArray } from "./point.ts";
+import { Color, ColorArray, ColorRGBA, ConstructColor } from "./color.ts";
+import { ConstructPoint, Point, PointArray, PointXY } from "./point.ts";
 
 interface CreateVertex {
-  position: Point | PointArray;
-  color: Color | ColorArray;
-  texCoord?: Point | PointArray;
+  position: PointXY | PointArray;
+  color: ColorRGBA | ColorArray;
+  texCoord?: PointXY | PointArray;
 }
 
 // Bytes offset
@@ -18,7 +18,7 @@ const TEX_X = 12;
 const TEX_Y = 16;
 
 export class Vertex {
-  public static SIZE_BYTES =
+  public static readonly SIZE_BYTES =
     2 * Float32Array.BYTES_PER_ELEMENT +
     4 * Uint8Array.BYTES_PER_ELEMENT +
     2 * Float32Array.BYTES_PER_ELEMENT;
@@ -27,44 +27,49 @@ export class Vertex {
 
   private dv = new DataView(this.array.buffer);
 
-  constructor({ position, color, texCoord = [0, 0] }: CreateVertex) {
-    const posX = Array.isArray(position) ? position[0] : position.x;
-    const posY = Array.isArray(position) ? position[1] : position.y;
+  #position: Point;
+  #color: Color;
+  #texCoord: Point;
 
-    const [r, g, b, a] = Array.isArray(color)
-      ? color
-      : [color.r, color.g, color.b, color.a];
-
-    const texX = Array.isArray(texCoord) ? texCoord[0] : texCoord!.x;
-    const texY = Array.isArray(texCoord) ? texCoord[1] : texCoord!.y;
-
-    this.dv.setFloat32(POS_X, posX, true);
-    this.dv.setFloat32(POS_Y, posY, true);
-
-    this.dv.setUint8(COLOR_R, r);
-    this.dv.setUint8(COLOR_G, g);
-    this.dv.setUint8(COLOR_B, b);
-    this.dv.setUint8(COLOR_A, a);
-
-    this.dv.setFloat32(TEX_X, texX, true);
-    this.dv.setFloat32(TEX_Y, texY, true);
+  constructor({ position, color, texCoord }: CreateVertex) {
+    this.position = new Point(position);
+    this.color = new Color(color);
+    this.texCoord = new Point(texCoord);
   }
 
-  get position(): PointArray {
-    return [this.dv.getFloat32(POS_X), this.dv.getFloat32(POS_Y)];
+  get position() {
+    return this.#position;
   }
 
-  get color(): ColorArray {
-    return [
-      this.dv.getUint8(COLOR_R),
-      this.dv.getUint8(COLOR_G),
-      this.dv.getUint8(COLOR_B),
-      this.dv.getUint8(COLOR_A),
-    ];
+  set position(newPosition: ConstructPoint) {
+    this.#position = new Point(newPosition);
+
+    this.dv.setFloat32(POS_X, this.#position.x, true);
+    this.dv.setFloat32(POS_Y, this.#position.y, true);
   }
 
-  get texCoord(): PointArray {
-    return [this.dv.getFloat32(TEX_X), this.dv.getFloat32(TEX_Y)];
+  get color() {
+    return this.#color;
+  }
+
+  set color(color: ConstructColor) {
+    this.#color = new Color(color);
+
+    this.dv.setUint8(COLOR_R, this.#color.r);
+    this.dv.setUint8(COLOR_G, this.#color.g);
+    this.dv.setUint8(COLOR_B, this.#color.b);
+    this.dv.setUint8(COLOR_A, this.#color.a);
+  }
+
+  get texCoord() {
+    return this.#texCoord;
+  }
+
+  set texCoord(newTexCoord: ConstructPoint) {
+    this.#texCoord = new Point(newTexCoord);
+
+    this.dv.setFloat32(TEX_X, this.#texCoord.x, true);
+    this.dv.setFloat32(TEX_Y, this.#texCoord.y, true);
   }
 
   toJSON() {
