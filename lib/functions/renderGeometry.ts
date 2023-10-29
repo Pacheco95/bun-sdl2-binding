@@ -16,8 +16,8 @@ export const SDL_RenderGeometry = (
   let offset = 0;
 
   for (let vertex of vertices) {
-    verticesPointer.set(vertex.array, offset)
-    offset += Vertex.SIZE_BYTES
+    verticesPointer.set(vertex.array, offset);
+    offset += Vertex.SIZE_BYTES;
   }
 
   const renderResult = foreign(

@@ -1,5 +1,5 @@
-import {Color, ColorArray} from "./color.ts";
-import {Point, PointArray} from "./point.ts";
+import { Color, ColorArray } from "./color.ts";
+import { Point, PointArray } from "./point.ts";
 
 interface CreateVertex {
   position: Point | PointArray;
@@ -23,8 +23,8 @@ export class Vertex {
     4 * Uint8Array.BYTES_PER_ELEMENT +
     2 * Float32Array.BYTES_PER_ELEMENT;
 
-  array = new Uint8ClampedArray(Vertex.SIZE_BYTES)
-  
+  array = new Uint8ClampedArray(Vertex.SIZE_BYTES);
+
   private dv = new DataView(this.array.buffer);
 
   constructor({ position, color, texCoord = [0, 0] }: CreateVertex) {

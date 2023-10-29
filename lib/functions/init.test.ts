@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { SDL_GetError, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit } from ".";
+import { SDL_GetError, SDL_Init, SDL_INIT_EVERYTHING, SDL_Quit } from ".";
 
 afterEach(SDL_Quit);
 
