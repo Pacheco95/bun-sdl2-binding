@@ -7,7 +7,7 @@ export type PointXY =
     }
   | Point;
 
-export type ConstructPoint = PointXY | PointArray;
+export type CreatePoint = PointXY | PointArray;
 
 const X_POS = 0;
 const Y_POS = 4;
@@ -17,9 +17,9 @@ export class Point {
   readonly array = new Uint8ClampedArray(Point.SIZE_BYTES);
   readonly #dv = new DataView(this.array.buffer);
 
-  constructor(props?: ConstructPoint);
+  constructor(props?: CreatePoint);
   constructor(x?: number, y?: number);
-  constructor(props?: number | ConstructPoint, y?: number) {
+  constructor(props?: number | CreatePoint, y?: number) {
     if (Array.isArray(props)) {
       this.xy = props;
     } else if (typeof props === "object") {

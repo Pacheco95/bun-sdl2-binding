@@ -1,79 +1,106 @@
-import { Color, ColorArray, ColorRGBA, ConstructColor } from "./color.ts";
-import { ConstructPoint, Point, PointArray, PointXY } from "./point.ts";
+import { Color, CreateColor } from "./color.ts";
+import { CreatePoint, Point } from "./point.ts";
 
-interface CreateVertex {
-  position: PointXY | PointArray;
-  color: ColorRGBA | ColorArray;
-  texCoord?: PointXY | PointArray;
-}
-
-// Bytes offset
-const POS_X = 0;
-const POS_Y = 4;
-const COLOR_R = 8;
-const COLOR_G = 9;
-const COLOR_B = 10;
-const COLOR_A = 11;
-const TEX_X = 12;
-const TEX_Y = 16;
+type CreateVertexArray = [CreatePoint, CreateColor, CreatePoint?];
+type CreateVertexFields = {
+  position: CreatePoint;
+  color: CreateColor;
+  texCoord?: CreatePoint;
+};
+type CreateVertex = CreateVertexFields | CreateVertexArray | Vertex;
 
 export class Vertex {
-  public static readonly SIZE_BYTES =
-    2 * Float32Array.BYTES_PER_ELEMENT +
-    4 * Uint8Array.BYTES_PER_ELEMENT +
-    2 * Float32Array.BYTES_PER_ELEMENT;
-
-  array = new Uint8ClampedArray(Vertex.SIZE_BYTES);
-
-  private dv = new DataView(this.array.buffer);
-
+  public static readonly SIZE_BYTES = 2 * Point.SIZE_BYTES + Color.SIZE_BYTES;
+  array: Uint8ClampedArray;
   #position: Point;
   #color: Color;
   #texCoord: Point;
 
-  constructor({ position, color, texCoord }: CreateVertex) {
-    this.position = new Point(position);
-    this.color = new Color(color);
-    this.texCoord = new Point(texCoord);
+  constructor(vertex: CreateVertex);
+  constructor(
+    position: CreatePoint,
+    color: CreateColor,
+    texCoord?: CreatePoint,
+  );
+  constructor(
+    vertex: CreateVertex | CreatePoint,
+    color: CreateColor,
+    texCoord: CreatePoint = [0, 0],
+  ) {
+    let initialValues = this.#computeInitialValues(vertex, color, texCoord);
+
+    this.#position = new Point(initialValues.position);
+    this.#color = new Color(initialValues.color);
+    this.#texCoord = new Point(initialValues.texCoord);
+    this.#updateArray();
   }
 
   get position() {
     return this.#position;
   }
 
-  set position(newPosition: ConstructPoint) {
+  set position(newPosition: CreatePoint) {
     this.#position = new Point(newPosition);
-
-    this.dv.setFloat32(POS_X, this.#position.x, true);
-    this.dv.setFloat32(POS_Y, this.#position.y, true);
+    this.#updateArray();
   }
 
   get color() {
     return this.#color;
   }
 
-  set color(color: ConstructColor) {
+  set color(color: CreateColor) {
     this.#color = new Color(color);
-
-    this.dv.setUint8(COLOR_R, this.#color.r);
-    this.dv.setUint8(COLOR_G, this.#color.g);
-    this.dv.setUint8(COLOR_B, this.#color.b);
-    this.dv.setUint8(COLOR_A, this.#color.a);
+    this.#updateArray();
   }
 
   get texCoord() {
     return this.#texCoord;
   }
 
-  set texCoord(newTexCoord: ConstructPoint) {
+  set texCoord(newTexCoord: CreatePoint) {
     this.#texCoord = new Point(newTexCoord);
-
-    this.dv.setFloat32(TEX_X, this.#texCoord.x, true);
-    this.dv.setFloat32(TEX_Y, this.#texCoord.y, true);
+    this.#updateArray();
   }
 
   toJSON() {
     return this.toString();
+  }
+
+  #updateArray() {
+    this.array = new Uint8ClampedArray([
+      ...this.position.array,
+      ...this.color.array,
+      ...this.texCoord.array,
+    ]);
+  }
+
+  #computeInitialValues(
+    vertex: CreateVertex | CreatePoint,
+    color: CreateColor,
+    texCoord: CreatePoint = [0, 0],
+  ): CreateVertexFields {
+    const isMultipleArgs = !!color;
+
+    if (isMultipleArgs) {
+      return {
+        position: vertex as CreatePoint,
+        color,
+        texCoord,
+      };
+    }
+
+    if (Array.isArray(vertex)) {
+      const [position, color, texCoord] = vertex as CreateVertexArray;
+      return { position, color, texCoord };
+    }
+
+    const vertexFields = vertex as CreateVertexFields;
+
+    return {
+      position: vertexFields.position,
+      color: vertexFields.color,
+      texCoord: vertexFields.texCoord,
+    };
   }
 }
 

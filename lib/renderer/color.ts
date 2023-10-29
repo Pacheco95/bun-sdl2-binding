@@ -8,7 +8,7 @@ export type ColorRGBA =
     }
   | Color;
 
-export type ConstructColor = ColorRGBA | ColorArray;
+export type CreateColor = ColorRGBA | ColorArray;
 
 const COLOR_R = 0;
 const COLOR_G = 1;
@@ -22,11 +22,11 @@ export class Color {
   readonly array = new Uint8ClampedArray(Color.SIZE_BYTES);
   readonly #dv = new DataView(this.array.buffer);
 
-  constructor(props?: ConstructColor);
+  constructor(props?: CreateColor);
 
   constructor(r?: number, g?: number, b?: number, a?: number);
 
-  constructor(props?: number | ConstructColor, g = 0, b = 0, a = 255) {
+  constructor(props?: number | CreateColor, g = 0, b = 0, a = 255) {
     if (Array.isArray(props)) {
       this.rgba = props;
       return;
