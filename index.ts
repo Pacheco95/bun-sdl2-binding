@@ -6,6 +6,10 @@ import {
   SDL_GetError,
   SDL_Init,
   SDL_INIT_EVERYTHING,
+  SDL_Log,
+  SDL_LogCategory,
+  SDL_LogCritical,
+  SDL_LogError,
   SDL_PollEvent,
   SDL_Quit,
   SDL_RenderClear,
@@ -22,29 +26,30 @@ import { Vertex } from "./lib/renderer/vertex.ts";
 import { SDL_DestroyRenderer, SDL_RenderPresent } from "./lib/ffi.ts";
 import { Color } from "./lib/renderer/color.ts";
 
-const SDL_Log = console.log;
-
-function logError() {
+function logError(category = SDL_LogCategory.SDL_LOG_CATEGORY_APPLICATION) {
   const error = SDL_GetError();
 
   if (error.length > 0) {
-    SDL_Log(error);
+    SDL_LogError(category, error);
   }
 }
 
-const abort = (errorMessage?: string) => {
-  SDL_Log(errorMessage, SDL_GetError());
+const abort = (
+  errorMessage?: string,
+  category = SDL_LogCategory.SDL_LOG_CATEGORY_APPLICATION,
+) => {
+  SDL_LogCritical(category, `${errorMessage} ${SDL_GetError()}`);
   exit(1);
 };
 
-SDL_Log("Process ID:", process.pid);
+SDL_Log(`Process ID: ${process.pid}`);
 
 if (SDL_Init(SDL_INIT_EVERYTHING) !== 0) {
-  abort("Failed to initialize SDL:");
+  abort("Failed to initialize SDL");
 }
 
 const window = SDL_CreateWindow(
-  "I'm talking to you through Bun 🚀",
+  "I'm talking to you through Bun FFI 🚀",
   SDL_WINDOWPOS_CENTERED,
   SDL_WINDOWPOS_CENTERED,
   800,
@@ -52,7 +57,7 @@ const window = SDL_CreateWindow(
 );
 
 if (!window) {
-  abort("Failed to create window:");
+  abort("Failed to create window", SDL_LogCategory.SDL_LOG_CATEGORY_VIDEO);
 }
 
 const renderer = SDL_CreateRenderer(
@@ -62,7 +67,7 @@ const renderer = SDL_CreateRenderer(
 );
 
 if (!renderer) {
-  abort("Failed to create renderer:");
+  abort("Failed to create renderer", SDL_LogCategory.SDL_LOG_CATEGORY_RENDER);
 }
 
 const vertices = [

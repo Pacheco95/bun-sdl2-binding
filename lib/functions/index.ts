@@ -11,3 +11,4 @@ export * from "./createRenderer";
 export * from "./setRendererDrawColor";
 export * from "./renderClear";
 export * from "./renderGeometry";
+export * from "./log";

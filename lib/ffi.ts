@@ -17,6 +17,7 @@ const {
     SDL_RenderPresent,
     SDL_RenderClear,
     SDL_RenderGeometry,
+    SDL_LogMessage,
   },
 } = dlopen(`libSDL2.${suffix}`, {
   SDL_GetVersion: {
@@ -85,6 +86,12 @@ const {
     ],
     returns: FFIType.int,
   },
+  SDL_Log: {
+    args: [FFIType.cstring],
+  },
+  SDL_LogMessage: {
+    args: [FFIType.int, FFIType.int, FFIType.cstring],
+  },
 });
 
 export {
@@ -103,4 +110,5 @@ export {
   SDL_RenderPresent,
   SDL_RenderClear,
   SDL_RenderGeometry,
+  SDL_LogMessage,
 };
