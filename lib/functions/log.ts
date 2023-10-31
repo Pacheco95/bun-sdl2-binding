@@ -1,7 +1,8 @@
 import { SDL_LogMessage as foreign } from "../ffi.ts";
-import { CString, ptr } from "bun:ffi";
+import { Pointer, ptr } from "bun:ffi";
 
 export enum SDL_LogPriority {
+  // noinspection JSUnusedGlobalSymbols
   SDL_LOG_PRIORITY_VERBOSE = 1,
   SDL_LOG_PRIORITY_DEBUG,
   SDL_LOG_PRIORITY_INFO,
@@ -12,6 +13,7 @@ export enum SDL_LogPriority {
 }
 
 export enum SDL_LogCategory {
+  // noinspection JSUnusedGlobalSymbols
   SDL_LOG_CATEGORY_APPLICATION,
   SDL_LOG_CATEGORY_ERROR,
   SDL_LOG_CATEGORY_ASSERT,
@@ -38,14 +40,14 @@ export enum SDL_LogCategory {
 export const SDL_LogMessage = (
   category: SDL_LogCategory,
   priority: SDL_LogPriority,
-  msg: string | CString,
+  msg: string | Pointer,
 ) => {
   const cStrPointer =
     typeof msg === "string" ? ptr(Buffer.from(msg + "\0", "utf8")) : msg;
   return foreign(category, priority, cStrPointer);
 };
 
-export const SDL_Log = (msg: string | CString) => {
+export const SDL_Log = (msg: string | Pointer) => {
   return SDL_LogMessage(
     SDL_LogCategory.SDL_LOG_CATEGORY_APPLICATION,
     SDL_LogPriority.SDL_LOG_PRIORITY_INFO,
@@ -55,14 +57,14 @@ export const SDL_Log = (msg: string | CString) => {
 
 export const SDL_LogDebug = (
   category: SDL_LogCategory,
-  msg: string | CString,
+  msg: string | Pointer,
 ) => {
   return SDL_LogMessage(category, SDL_LogPriority.SDL_LOG_PRIORITY_DEBUG, msg);
 };
 
 export const SDL_LogCritical = (
   category: SDL_LogCategory,
-  msg: string | CString,
+  msg: string | Pointer,
 ) => {
   return SDL_LogMessage(
     category,
@@ -70,21 +72,24 @@ export const SDL_LogCritical = (
     msg,
   );
 };
+
 export const SDL_LogError = (
   category: SDL_LogCategory,
-  msg: string | CString,
+  msg: string | Pointer,
 ) => {
   return SDL_LogMessage(category, SDL_LogPriority.SDL_LOG_PRIORITY_ERROR, msg);
 };
+
 export const SDL_LogInfo = (
   category: SDL_LogCategory,
-  msg: string | CString,
+  msg: string | Pointer,
 ) => {
   return SDL_LogMessage(category, SDL_LogPriority.SDL_LOG_PRIORITY_INFO, msg);
 };
+
 export const SDL_LogVerbose = (
   category: SDL_LogCategory,
-  msg: string | CString,
+  msg: string | Pointer,
 ) => {
   return SDL_LogMessage(
     category,
@@ -92,9 +97,10 @@ export const SDL_LogVerbose = (
     msg,
   );
 };
+
 export const SDL_LogWarn = (
   category: SDL_LogCategory,
-  msg: string | CString,
+  msg: string | Pointer,
 ) => {
   return SDL_LogMessage(category, SDL_LogPriority.SDL_LOG_PRIORITY_WARN, msg);
 };
