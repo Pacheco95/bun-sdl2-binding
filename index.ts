@@ -19,12 +19,16 @@ import {
   SDL_SetRenderDrawColor,
   SDL_WINDOWPOS_CENTERED,
 } from "./lib/functions";
-import { SDL_Event } from "./lib/events/event.ts";
-import { SDL_EventType } from "./lib/events/eventType.ts";
-import { KeyCode } from "./lib/events/keyboard/KeyCode.ts";
-import { Vertex } from "./lib/renderer/vertex.ts";
-import { SDL_DestroyRenderer, SDL_RenderPresent } from "./lib/ffi.ts";
-import { Color } from "./lib/renderer/color.ts";
+import { KeyCode, SDL_Event, SDL_EventType } from "./lib/events";
+import { Color, Point, Vertex } from "./lib/renderer";
+import {
+  SDL_DestroyRenderer,
+  SDL_GetPerformanceCounter,
+  SDL_GetPerformanceFrequency,
+  SDL_RenderPresent,
+} from "./lib/ffi.ts";
+import { SDL_SetHint } from "./lib/functions/setHint.ts";
+import { SDL_HINT_RENDER_SCALE_QUALITY } from "./lib/hints.ts";
 
 function logError(category = SDL_LogCategory.SDL_LOG_CATEGORY_APPLICATION) {
   const error = SDL_GetError();
@@ -42,18 +46,31 @@ const abort = (
   exit(1);
 };
 
+const createEquilateralTriangle = (pivot: Point, size: number) => {
+  const { x, y } = pivot;
+  const { sqrt } = Math;
+
+  return [
+    new Vertex([x, y + size], Color.RED),
+    new Vertex([x - (sqrt(3) / 2) * size, y - size / 2], Color.GREEN),
+    new Vertex([x + (sqrt(3) / 2) * size, y - size / 2], Color.BLUE),
+  ];
+};
+
 SDL_Log(`Process ID: ${process.pid}`);
 
 if (SDL_Init(SDL_INIT_EVERYTHING) !== 0) {
   abort("Failed to initialize SDL");
 }
 
+const SCREEN_W = 800;
+const SCREEN_H = 600;
 const window = SDL_CreateWindow(
   "I'm talking to you through Bun FFI 🚀",
   SDL_WINDOWPOS_CENTERED,
   SDL_WINDOWPOS_CENTERED,
-  800,
-  600,
+  SCREEN_W,
+  SCREEN_H,
 );
 
 if (!window) {
@@ -70,13 +87,17 @@ if (!renderer) {
   abort("Failed to create renderer", SDL_LogCategory.SDL_LOG_CATEGORY_RENDER);
 }
 
-const vertices = [
-  new Vertex([400, 150], Color.RED),
-  new Vertex([200, 450], Color.GREEN),
-  new Vertex([600, 450], Color.BLUE),
-];
+if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
+  console.error("Failed to set linear filtering");
+}
+
+const screenCenter = new Point(SCREEN_W / 2, SCREEN_H / 2);
+const triangle = createEquilateralTriangle(screenCenter, 250);
+const rotationDegrees = 50;
 
 let running = true;
+let last = Number(SDL_GetPerformanceCounter());
+let deltaTime = 0;
 
 while (running) {
   let event: SDL_Event;
@@ -93,12 +114,22 @@ while (running) {
     }
   }
 
+  const degrees = rotationDegrees * deltaTime;
+  const toOrigin = new Point(-screenCenter.x, -screenCenter.y);
+  triangle.forEach(({ position }) => position.translated(toOrigin));
+  triangle.forEach(({ position }) => position.rotated(degrees));
+  triangle.forEach(({ position }) => position.translated(screenCenter));
+
   SDL_SetRenderDrawColor(renderer!, 0, 0, 0, 255);
   SDL_RenderClear(renderer!);
-  SDL_RenderGeometry(renderer!, null, vertices);
+  SDL_RenderGeometry(renderer!, null, triangle);
   SDL_RenderPresent(renderer);
 
   logError();
+
+  const now = Number(SDL_GetPerformanceCounter());
+  deltaTime = (now - last) / Number(SDL_GetPerformanceFrequency());
+  last = now;
 }
 
 SDL_DestroyRenderer(renderer);

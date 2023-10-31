@@ -11,7 +11,6 @@ export type CreateVertex = CreateVertexFields | CreateVertexArray | Vertex;
 
 export class Vertex {
   public static readonly SIZE_BYTES = 2 * Point.SIZE_BYTES + Color.SIZE_BYTES;
-  array: Uint8ClampedArray;
   #position: Point;
   #color: Color;
   #texCoord: Point;
@@ -32,7 +31,6 @@ export class Vertex {
     this.#position = new Point(initialValues.position);
     this.#color = new Color(initialValues.color);
     this.#texCoord = new Point(initialValues.texCoord);
-    this.#updateArray();
   }
 
   get position() {
@@ -41,7 +39,6 @@ export class Vertex {
 
   set position(newPosition: CreatePoint) {
     this.#position = new Point(newPosition);
-    this.#updateArray();
   }
 
   get color() {
@@ -50,7 +47,6 @@ export class Vertex {
 
   set color(color: CreateColor) {
     this.#color = new Color(color);
-    this.#updateArray();
   }
 
   get texCoord() {
@@ -59,19 +55,18 @@ export class Vertex {
 
   set texCoord(newTexCoord: CreatePoint) {
     this.#texCoord = new Point(newTexCoord);
-    this.#updateArray();
   }
 
-  toJSON() {
-    return this.toString();
-  }
-
-  #updateArray() {
-    this.array = new Uint8ClampedArray([
+  get array() {
+    return new Uint8ClampedArray([
       ...this.position.array,
       ...this.color.array,
       ...this.texCoord.array,
     ]);
+  }
+
+  toJSON() {
+    return this.toString();
   }
 
   #computeInitialValues(

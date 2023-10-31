@@ -54,4 +54,30 @@ export class Point {
     this.x = x;
     this.y = y;
   }
+
+  static rotate(deg: number, point: Point, pivot = new Point(0, 0)): Point {
+    const angleInRadians = (deg * Math.PI) / 180;
+    const cosTheta = Math.cos(angleInRadians);
+    const sinTheta = Math.sin(angleInRadians);
+
+    const translatedX = point.x - pivot.x;
+    const translatedY = point.y - pivot.y;
+
+    const newX = translatedX * cosTheta - translatedY * sinTheta + pivot.x;
+    const newY = translatedX * sinTheta + translatedY * cosTheta + pivot.y;
+
+    return new Point(newX, newY);
+  }
+
+  static translate(point: Point, offset: Point) {
+    return new Point(point.x + offset.x, point.y + offset.y);
+  }
+
+  rotated(deg: number, pivot = new Point(0, 0)) {
+    this.xy = Point.rotate(deg, this, pivot).xy;
+  }
+
+  translated(offset: Point) {
+    this.xy = Point.translate(this, offset).xy;
+  }
 }

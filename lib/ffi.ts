@@ -18,6 +18,9 @@ const {
     SDL_RenderClear,
     SDL_RenderGeometry,
     SDL_LogMessage,
+    SDL_GetPerformanceCounter,
+    SDL_GetPerformanceFrequency,
+    SDL_SetHint,
   },
 } = dlopen(`libSDL2.${suffix}`, {
   SDL_GetVersion: {
@@ -92,6 +95,16 @@ const {
   SDL_LogMessage: {
     args: [FFIType.int, FFIType.int, FFIType.cstring],
   },
+  SDL_GetPerformanceCounter: {
+    returns: FFIType.u64,
+  },
+  SDL_GetPerformanceFrequency: {
+    returns: FFIType.u64,
+  },
+  SDL_SetHint: {
+    args: [FFIType.cstring, FFIType.cstring],
+    returns: FFIType.int,
+  },
 });
 
 export {
@@ -111,4 +124,7 @@ export {
   SDL_RenderClear,
   SDL_RenderGeometry,
   SDL_LogMessage,
+  SDL_GetPerformanceCounter,
+  SDL_GetPerformanceFrequency,
+  SDL_SetHint,
 };
