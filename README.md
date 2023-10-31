@@ -8,13 +8,25 @@ See this example in [index.ts](index.ts)
 
 ---
 
+# Requirements
+
+1. Install [Bun](https://bun.sh/)
+2. Install the SDL2 development library
+```shell
+sudo apt install libsdl2-dev
+```
+
+# Setup
+
 To install dependencies:
 
 ```bash
+git clone git@github.com:Pacheco95/bun-sdl2-binding.git
+cd bun-sdl2-binding
 bun install
 ```
 
-To run:
+To run the example above:
 
 ```bash
 bun run index.ts
